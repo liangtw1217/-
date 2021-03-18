@@ -1,0 +1,24 @@
+import requests
+api_url='https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-7116B6C5-CE8F-4317-9EEC-AACC285A8CC3&locationName=%E8%87%BA%E6%9D%B1%E7%B8%A3'
+def retrieval_api(api_url):
+  response = requests.get(api_url)
+  # print('Status Code: ' + str(response.status_code))
+  return str(response.json())
+
+location_json = retrieval_api(api_url)
+location_json = location_json.replace("\'", "\"")
+import json
+location_dic = json.loads(location_json)
+
+def printData(i):
+  #臺東縣日出日沒時刻
+  place=location_dic['records']['locations']['location'][0]['locationName']
+  date1 = location_dic['records']['locations']['location'][0]['time'][i]['dataTime']
+  name1 = location_dic['records']['locations']['location'][0]['time'][i]['parameter'][1]['parameterName']
+  time1 = location_dic['records']['locations']['location'][0]['time'][i]['parameter'][1]['parameterValue']
+  name2 = location_dic['records']['locations']['location'][0]['time'][i]['parameter'][5]['parameterName']
+  time2 = location_dic['records']['locations']['location'][0]['time'][i]['parameter'][5]['parameterValue']
+  print(place+date1+name1+time1+','+name2+time2)
+  
+for i in range(100):
+ printData(i)
